@@ -11,7 +11,7 @@ const blockers = {
     trim: true,
   },
   content: {
-    type: String,
+    type: [{}],
     required: [true, 'content is required'],
     trim: true,
   },
