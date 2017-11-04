@@ -1,0 +1,12 @@
+{
+  "verbose": true,
+  "legacyWatch": true,
+  "ignore": ["node_modules", ".git"],
+  "execMap": {
+    "js": "babel-node --harmony"
+  },
+  "watch": [
+   "./"
+  ],
+  "ext": "js json"
+}
