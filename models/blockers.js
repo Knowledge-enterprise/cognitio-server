@@ -11,7 +11,7 @@ const blockers = {
     trim: true,
   },
   content: {
-    type: [{}],
+    type: String,
     required: [true, 'content is required'],
     trim: true,
   },
@@ -45,6 +45,10 @@ const blockers = {
   category: {
     type: Schema.Types.ObjectId,
     ref: 'categories',
+  },
+  rating: {
+    type: Schema.Types.Array,
+    default: [],
   },
   views: {
     type: [{type: Schema.Types.ObjectId}],
