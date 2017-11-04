@@ -13,5 +13,6 @@ router.put('/:id', Blockers.updateBlocker);
 router.post('/', AM.verify, BM.createBlocker, Blockers.createBlocker);
 router.delete('/:id', Blockers.deleteBlocker);
 router.put('/:id/upvote', AM.verify, Blockers.upvoteBlocker);
+router.put('/:id/downvote', AM.verify, Blockers.downvoteBlocker);
 
 export default router;

@@ -118,4 +118,23 @@ export default class Blockers {
       Response.badRequest(res);
     });
   }
+
+  static downvoteBlocker(req, res) {
+    const loggedInUserEmail = res.locals.user.UserInfo.email;
+    blockerModel.findOneAndUpdate({
+      _id: req.params.id
+    }, {
+      $pullAll: {
+        rating: [loggedInUserEmail],
+      }
+    }, {
+      new: true,
+    })
+    .then((done) => {
+      Response.success(res, done);
+    })
+    .catch((error) => {
+      Response.badRequest(res);
+    });
+  }
 }
