@@ -29,7 +29,7 @@ export default class Users {
     let userToken;
     userModel.findOne({ 'uid': req.body.uid })
       .then((existingUser) => {
-        if(newUser !== null) {
+        if(existingUser !== null) {
           userToken = jwt.sign({
             data: existingUser
           }, process.env.JWT_SECRET, { expiresIn: '1h' });
