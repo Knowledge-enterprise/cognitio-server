@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 import { Response } from '../utils';
 import { userModel } from '../models';
 
@@ -25,15 +26,32 @@ export default class Users {
 
   static addUser(req, res) {
     const user = new userModel(req.body);
-
-    user.save()
-      .then((done) => {
-        Response.success(res, done);
+    let userToken;
+    userModel.findOne({ 'uid': req.body.uid })
+      .then((existingUser) => {
+        if(existingUser !== null) {
+          userToken = jwt.sign({
+            data: existingUser
+          }, process.env.JWT_SECRET, { expiresIn: '1h' });
+          Response.success(res, userToken);
+        } else {
+          user.save()
+          .then((done) => {
+            userToken = jwt.sign({
+              data: req.body
+            }, process.env.JWT_SECRET, { expiresIn: '1h' });
+              Response.success(res, userToken);
+            })
+            .catch((error) => {
+              Response.badRequest(res, {
+                message: error
+              });
+            })
+        }
       })
       .catch((error) => {
-        Response.badRequest(res, {
-          message: error
-        });
+        Response.badRequest(res, error);
       })
+    
   }
 }
