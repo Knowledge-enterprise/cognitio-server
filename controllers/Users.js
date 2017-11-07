@@ -36,22 +36,19 @@ export default class Users {
           Response.success(res, userToken);
         } else {
           user.save()
-          .then((done) => {
-            userToken = jwt.sign({
-              data: req.body
-            }, process.env.JWT_SECRET, { expiresIn: '1h' });
-              Response.success(res, userToken);
-            })
-            .catch((error) => {
-              Response.badRequest(res, {
-                message: error
-              });
-            })
+            .then((done) => {
+              userToken = jwt.sign({ data: done}, process.env.JWT_SECRET, { expiresIn: '1h' });
+                Response.success(res, userToken);
+              })
+              .catch((error) => {
+                Response.badRequest(res, {
+                  message: error
+                });
+              })
         }
       })
       .catch((error) => {
         Response.badRequest(res, error);
-      })
-    
+      });
   }
 }

@@ -70,6 +70,7 @@ export default class Blockers {
     blockerModel.find({
       isArchived: false,
     })
+      .sort({ _id: -1 })
       .populate('user')
       .then((done) => {
         Response.success(res, done);
@@ -89,7 +90,17 @@ export default class Blockers {
           _id: res.locals.blocker.user
         }, updateUser)
           .then((user) => {
-            Response.success(res, done);
+            blockerModel.findOne({
+              _id: done._id,
+              isArchived: false,
+            })
+              .populate('user')
+              .then((response) => {
+                Response.success(res, response);
+              })
+              .catch((error) => {
+                Response.internalError(res, error)
+              });
           })
           .catch((error) => {
             Response.internalError(res, error)
@@ -101,12 +112,11 @@ export default class Blockers {
   }
 
   static upvoteBlocker(req, res) {
-    const loggedInUserEmail = res.locals.user.UserInfo.email;
     blockerModel.findOneAndUpdate({
       _id: req.params.id
     }, {
       $addToSet: {
-        rating: loggedInUserEmail,
+        rating: res.locals.user.email,
       }
     }, {
       new: true,
@@ -120,12 +130,11 @@ export default class Blockers {
   }
 
   static downvoteBlocker(req, res) {
-    const loggedInUserEmail = res.locals.user.UserInfo.email;
     blockerModel.findOneAndUpdate({
       _id: req.params.id
     }, {
       $pullAll: {
-        rating: [loggedInUserEmail],
+        rating: [res.locals.user.email],
       }
     }, {
       new: true,
