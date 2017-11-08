@@ -61,9 +61,14 @@ server.get('*', (req, res) => {
   Response.success(res, 'Cognitio | Knowledge Enterprise | Built for Devs. by Devs.')
 });
 
-spdy.createServer(sslOptions, server)
+if (process.env.NODE_ENV === 'production') {
+  server.listen(PORT, () =>
+      logger.info(`Cognitio API server started on PORT ${PORT}`.green));
+} else {
+  spdy.createServer(sslOptions, server)
   .listen(PORT, () =>
     logger.info(`Cognitio API server started on PORT ${PORT}`.green));
+}
 
 subscribeHandlers();
 
