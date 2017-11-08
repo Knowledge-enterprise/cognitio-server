@@ -1,10 +1,10 @@
+import mongoose from 'mongoose';
 import { Response } from '../utils';
-import { blockerModel, userModel } from '../models';
+import { blockerModel, userModel, commentModel } from '../models';
 import publisher from '../events/Publisher';
 
 export default class Blockers {
   static getBlocker(req, res) {
-
     blockerModel.findOne({
       _id: req.params.id,
       isArchived: false,
@@ -121,12 +121,12 @@ export default class Blockers {
     }, {
       new: true,
     })
-    .then((done) => {
-      Response.success(res, done);
-    })
-    .catch((error) => {
-      Response.badRequest(res);
-    });
+      .then((done) => {
+        Response.success(res, done);
+      })
+      .catch((error) => {
+        Response.badRequest(res);
+      });
   }
 
   static downvoteBlocker(req, res) {
@@ -139,11 +139,57 @@ export default class Blockers {
     }, {
       new: true,
     })
-    .then((done) => {
-      Response.success(res, done);
+      .then((done) => {
+        Response.success(res, done);
+      })
+      .catch((error) => {
+        Response.badRequest(res);
+      });
+  }
+
+  static addComment(req, res) {
+    const blockerId = req.params.id;
+    blockerModel.findById(req.params.id)
+      .then((blocker) => {
+        if (!blocker) return Response.badRequest(res, {
+          message: `No rating found with Id ${blockerId}`
+        });
+        const comment = new commentModel(Object.assign({}, {
+          comment: req.body.comment,
+          blocker: blockerId,
+          user: res.locals.user._id,
+        }));
+        comment.save()
+          .then((newComment) => {
+            publisher.publish('added_new_comment', newComment);
+            commentModel.findById(newComment._id)
+              .populate('user')
+              .then((populatedComment) => {
+                Response.success(res, populatedComment)
+              })
+              .catch((error) => Response.internalError(res, `An error occurred ${error}`))
+          })
+          .catch((error) => {
+            Response.badRequest(res, `An error occurred creating comment ${error}`);
+          });
+      })
+      .catch((error) => {
+        Response.badRequest(res, `Error processing request: ${error}`)
+      })
+  }
+
+  static getComments(req, res) {
+    const blockerId = req.params.id;
+    commentModel.find({
+      blocker: blockerId
     })
-    .catch((error) => {
-      Response.badRequest(res);
-    });
+      .sort({ _id: -1 })
+      .populate('user')
+      .then((done) => {
+        Response.success(res, done);
+      })
+      .catch((error) => {
+        Response.badRequest(res, error);
+      });
   }
 }

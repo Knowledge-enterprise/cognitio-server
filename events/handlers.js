@@ -15,5 +15,20 @@ export default {
       .catch((error) => {
         logger.error(`ERROR: updating blocker view count ${error}`);
       });
+  },
+
+  updateBlockerWithNewComment(payload) {
+    blockerModel.findByIdAndUpdate(payload.blocker, {
+      $addToSet: { comments: payload._id }
+    }, {
+      new: true,
+      upsert: false,
+    })
+      .then((updatedBlocker) => {
+        logger.info(`successfully associated new comment to a blocker ${updatedBlocker}`);
+      })
+      .catch((error) => {
+        logger.error(`ERROR: associating comment to a blocker ${error}`);
+      });
   }
 }

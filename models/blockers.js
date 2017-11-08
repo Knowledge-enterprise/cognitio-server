@@ -32,11 +32,11 @@ const blockers = {
   },
   createdAt : {
     type : Date,
-    default: new Date()
+    default:  Date.now(),
   },
   updatedAt : {
     type : Date,
-    default: new Date()
+    default: Date.now()
   },
   user: {
     type: Schema.Types.ObjectId,
@@ -47,7 +47,7 @@ const blockers = {
     ref: 'categories',
   },
   rating: {
-    type: Schema.Types.Array,
+    type: [String],
     default: [],
   },
   views: {
@@ -55,7 +55,13 @@ const blockers = {
     set: (_id) => {
       return [...new Set(_id)];
     }
+  },
+  comments: {
+    type: [Schema.Types.ObjectId],
+    default: [],
+    ref: 'Comments',
   }
+
 };
 
 const blockersShema = Schema(blockers);

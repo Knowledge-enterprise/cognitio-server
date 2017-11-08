@@ -10,7 +10,6 @@ import { configs } from './configs';
 import { subscribeHandlers } from './events';
 import spdy from 'spdy';
 import fs from 'fs';
-import HE from 'he-sdk-nodejs';
 
 const PORT = process.env.PORT || 5001;
 const server = express();
@@ -39,22 +38,6 @@ server.all('*', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'X-Requested-With');
   next();
-});
-
-server.post('/compile', (req, res) => {
-  const source = `import sys;print(sys.path)`;
-  const settings = {
-    'client_secret': '664e9b3a4dcc4810e8c8a1b262a1e11a5bd94056' ,
-    'async': 0 ,
-    'lang': 'PYTHON' ,
-    'time_limit': 5,
-    'memory_limit': 262144
-  };
-
-  HE.run(settings , source , function(err , result){
-    if (err) return Response.badRequest(res, err);
-    Response.success(res, JSON.parse(result));
-  });
 });
 
 server.get('*', (req, res) => {
