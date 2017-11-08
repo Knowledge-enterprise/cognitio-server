@@ -7,6 +7,7 @@ import {
 
 const router = express.Router();
 
+router.get('/search', AM.verify, Blockers.searchBlockers);
 router.get('/', AM.verify, Blockers.getAllBlockers);
 router.get('/:id', AM.verify, Blockers.getBlocker);
 router.put('/:id', AM.verify, Blockers.updateBlocker);
