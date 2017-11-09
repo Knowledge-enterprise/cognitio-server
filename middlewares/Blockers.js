@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import { blockerModel, userModel } from '../models';
 import { Response } from '../utils';
@@ -21,7 +22,15 @@ export default class Blockers {
     });
   }
 
-  static viewCounter(req, res) {
-
+  static deleteBlocker(req, res, next) {
+    if (!res.locals.user || !req.params.id) return Response.unAuthorized(res);
+    blockerModel.findById(req.params.id)
+      .then((blocker) => {
+        if (blocker.user.toString() !== res.locals.user._id.toString()) {
+          return Response.unAuthorized(res);
+        }
+        return next();
+      })
+      .catch(() => Response.badRequest(res, 'An error occurred'))
   }
 }

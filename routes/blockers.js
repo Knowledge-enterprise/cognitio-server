@@ -12,7 +12,7 @@ router.get('/', AM.verify, Blockers.getAllBlockers);
 router.get('/:id', AM.verify, Blockers.getBlocker);
 router.put('/:id', AM.verify, Blockers.updateBlocker);
 router.post('/', AM.verify, BM.createBlocker, Blockers.createBlocker);
-router.delete('/:id', Blockers.deleteBlocker);
+router.delete('/:id', AM.verify, BM.deleteBlocker, Blockers.deleteBlocker);
 router.put('/:id/upvote', AM.verify, Blockers.upvoteBlocker);
 router.put('/:id/downvote', AM.verify, Blockers.downvoteBlocker);
 router.get('/:id/comments', AM.verify, Blockers.getComments);
