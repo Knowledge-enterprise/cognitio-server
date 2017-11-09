@@ -19,7 +19,3 @@ router.get('/:id/comments', AM.verify, Blockers.getComments);
 router.post('/:id/comments', AM.verify, Blockers.addComment);
 
 export default router;
-
-
-
-export default router;

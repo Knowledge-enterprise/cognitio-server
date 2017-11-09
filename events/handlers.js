@@ -6,9 +6,9 @@ export default {
     blockerModel.findByIdAndUpdate(payload._id, {
       $push: { views: [payload._id] },
     }, {
-      new: true,
-      upsert: false,
-    })
+        new: true,
+        upsert: false,
+      })
       .then((updated) => {
         logger.info(`succssfully updated blocker view count ${payload.views.length} => ${updated.views.length}`.cyan)
       })
@@ -21,9 +21,9 @@ export default {
     blockerModel.findByIdAndUpdate(payload.blocker, {
       $addToSet: { comments: payload._id }
     }, {
-      new: true,
-      upsert: false,
-    })
+        new: true,
+        upsert: false,
+      })
       .then((updatedBlocker) => {
         logger.info(`successfully associated new comment to a blocker ${updatedBlocker}`);
       })

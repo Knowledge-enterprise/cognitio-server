@@ -29,7 +29,7 @@ export default class Users {
     let userToken;
     userModel.findOne({ 'uid': req.body.uid })
       .then((existingUser) => {
-        if(existingUser !== null) {
+        if (existingUser !== null) {
           userToken = jwt.sign({
             data: existingUser
           }, process.env.JWT_SECRET, { expiresIn: '1h' });
@@ -37,14 +37,14 @@ export default class Users {
         } else {
           user.save()
             .then((done) => {
-              userToken = jwt.sign({ data: done}, process.env.JWT_SECRET, { expiresIn: '1h' });
-                Response.success(res, userToken);
-              })
-              .catch((error) => {
-                Response.badRequest(res, {
-                  message: error
-                });
-              })
+              userToken = jwt.sign({ data: done }, process.env.JWT_SECRET, { expiresIn: '1h' });
+              Response.success(res, userToken);
+            })
+            .catch((error) => {
+              Response.badRequest(res, {
+                message: error
+              });
+            })
         }
       })
       .catch((error) => {

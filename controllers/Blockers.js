@@ -27,19 +27,19 @@ export default class Blockers {
     blockerModel.findOneAndUpdate({
       _id: req.params.id
     }, {
-      $set: {
-        isArchived: true,
-      }
-    }, {
-      new: false,
-      upsert: false,
-    })
-    .then((done) => {
-      Response.success(res, {
-        message: 'successfully archived'
-      });
-    })
-    .catch((error) => {
+        $set: {
+          isArchived: true,
+        }
+      }, {
+        new: false,
+        upsert: false,
+      })
+      .then((done) => {
+        Response.success(res, {
+          message: 'successfully archived'
+        });
+      })
+      .catch((error) => {
         Response.badRequest(res, {
           message: 'error'
         });
@@ -50,20 +50,20 @@ export default class Blockers {
     blockerModel.findOneAndUpdate({
       _id: req.params.id
     }, {
-      $set: {
-        title: req.body.title,
-        content: req.body.content,
-        updatedAt: new Date(),
-      }
-    }, {
-      new: true,
-    })
-    .then((done) => {
-      Response.success(res, done);
-    })
-    .catch((error) => {
-      Response.badRequest(res);
-    });
+        $set: {
+          title: req.body.title,
+          content: req.body.content,
+          updatedAt: new Date(),
+        }
+      }, {
+        new: true,
+      })
+      .then((done) => {
+        Response.success(res, done);
+      })
+      .catch((error) => {
+        Response.badRequest(res);
+      });
   }
 
   static getAllBlockers(req, res) {
@@ -115,12 +115,12 @@ export default class Blockers {
     blockerModel.findOneAndUpdate({
       _id: req.params.id
     }, {
-      $addToSet: {
-        rating: res.locals.user.email,
-      }
-    }, {
-      new: true,
-    })
+        $addToSet: {
+          rating: res.locals.user.email,
+        }
+      }, {
+        new: true,
+      })
       .then((done) => {
         Response.success(res, done);
       })
@@ -133,12 +133,12 @@ export default class Blockers {
     blockerModel.findOneAndUpdate({
       _id: req.params.id
     }, {
-      $pullAll: {
-        rating: [res.locals.user.email],
-      }
-    }, {
-      new: true,
-    })
+        $pullAll: {
+          rating: [res.locals.user.email],
+        }
+      }, {
+        new: true,
+      })
       .then((done) => {
         Response.success(res, done);
       })
@@ -199,11 +199,11 @@ export default class Blockers {
         $search: req.query.q
       }
     })
-    .then((done) => {
-      Response.success(res, done);
-    })
-    .catch((error) => {
-      Response.notFound(res);
-    });
-  } 
+      .then((done) => {
+        Response.success(res, done);
+      })
+      .catch((error) => {
+        Response.notFound(res);
+      });
+  }
 }

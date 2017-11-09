@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { connection } from  '../configs';
+import { connection } from '../configs';
 
 const Schema = mongoose.Schema;
 
@@ -30,12 +30,12 @@ const blockers = {
     type: Boolean,
     default: false,
   },
-  createdAt : {
-    type : Date,
-    default:  Date.now(),
+  createdAt: {
+    type: Date,
+    default: Date.now(),
   },
-  updatedAt : {
-    type : Date,
+  updatedAt: {
+    type: Date,
     default: Date.now()
   },
   user: {
@@ -51,7 +51,7 @@ const blockers = {
     default: [],
   },
   views: {
-    type: [{type: Schema.Types.ObjectId}],
+    type: [{ type: Schema.Types.ObjectId }],
     set: (_id) => {
       return [...new Set(_id)];
     }
@@ -70,12 +70,12 @@ const blockersModel = connection.model('Blockers', blockersShema);
 /**
  * Custom validations
  */
-blockersShema.path('title').validate(function(value, callback) {
-  blockersModel.count({ title: value }, function(error, count) {
-      if (error) {
-        return done(error);
-      }
-      callback(!count);
+blockersShema.path('title').validate(function (value, callback) {
+  blockersModel.count({ title: value }, function (error, count) {
+    if (error) {
+      return done(error);
+    }
+    callback(!count);
   });
 }, { message: 'title already exists', isAsync: true });
 

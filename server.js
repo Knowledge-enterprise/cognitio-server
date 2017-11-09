@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 5001;
 const server = express();
 const sslOptions = {
   key: fs.readFileSync(__dirname + '/server.key'),
-  cert:  fs.readFileSync(__dirname + '/server.crt'),
+  cert: fs.readFileSync(__dirname + '/server.crt'),
   spdy: {
     protocols: ['h2', 'spdy/3.1', 'http/1.1'],
     plain: false,
@@ -46,11 +46,11 @@ server.get('*', (req, res) => {
 
 if (process.env.NODE_ENV === 'production') {
   server.listen(PORT, () =>
-      logger.info(`Cognitio API server started on PORT ${PORT}`.green));
+    logger.info(`Cognitio API server started on PORT ${PORT}`.green));
 } else {
   spdy.createServer(sslOptions, server)
-  .listen(PORT, () =>
-    logger.info(`Cognitio API server started on PORT ${PORT}`.green));
+    .listen(PORT, () =>
+      logger.info(`Cognitio API server started on PORT ${PORT}`.green));
 }
 
 subscribeHandlers();

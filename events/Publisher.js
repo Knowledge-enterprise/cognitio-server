@@ -5,9 +5,9 @@ class Publisher {
     this.subscribers = [];
   }
 
-  subscribe (topic, subscriber) { // pass an array of subscribers or just pass a single subscriber
+  subscribe(topic, subscriber) { // pass an array of subscribers or just pass a single subscriber
     this.subscribers[topic] || (this.subscribers[topic] = []);
-    if(Array.isArray(subscriber)) {
+    if (Array.isArray(subscriber)) {
       subscriber.forEach((each) => {
         this.subscribers[topic].push(each);
       });
@@ -17,7 +17,7 @@ class Publisher {
     logger.info(`successfully subscribe ${subscriber.name} to topic ${topic}`.cyan);
   }
 
-  unsubscribe (topic, subscriber) {
+  unsubscribe(topic, subscriber) {
     if (!this.subscribers[topic]) return;
 
     this.subscribers[topic] = this.subscribers[topic].filter((sub) => {
