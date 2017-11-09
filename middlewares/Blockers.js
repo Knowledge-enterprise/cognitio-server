@@ -4,7 +4,7 @@ import { Response } from '../utils';
 
 export default class Blockers {
   static createBlocker(req, res, next) {
-    const data = Object.assign({}, { user: res.locals.user._id  }, req.body);
+    const data = Object.assign({}, { user: res.locals.user._id }, req.body);
     const blocker = new blockerModel(data);
     blocker.validate((error) => {
       if (error) {
@@ -22,6 +22,6 @@ export default class Blockers {
   }
 
   static viewCounter(req, res) {
-    
+
   }
 }
