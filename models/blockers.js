@@ -1,38 +1,40 @@
-import mongoose from 'mongoose';
-import { connection } from '../configs';
+import mongoose from "mongoose";
+import { connection } from "../configs";
 
 const Schema = mongoose.Schema;
 
 const blockers = {
   title: {
     type: String,
-    required: [true, 'title is required'],
+    required: [true, "title is required"],
     unique: true,
     trim: true,
+    text: true
   },
   content: {
     type: String,
-    required: [true, 'content is required'],
-    trim: true,
+    required: [true, "content is required"],
+    trim: true
   },
   tags: {
-    type: [{}],
-    required: [true, 'tags are required'],
-    set: (tags) => {
+    type: [String],
+    required: [true, "tags are required"],
+    set: tags => {
       return [...new Set(tags)];
-    }
+    },
+    text: true
   },
   files: {
     type: [{}],
-    required: false,
+    required: false
   },
   isArchived: {
     type: Boolean,
-    default: false,
+    default: false
   },
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now()
   },
   updatedAt: {
     type: Date,
@@ -40,43 +42,43 @@ const blockers = {
   },
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'Users',
+    ref: "Users"
   },
   category: {
     type: Schema.Types.ObjectId,
-    ref: 'categories',
+    ref: "categories"
   },
   rating: {
     type: [String],
-    default: [],
+    default: []
   },
   views: {
     type: [{ type: Schema.Types.ObjectId }],
-    set: (_id) => {
+    set: _id => {
       return [...new Set(_id)];
     }
   },
   comments: {
     type: [Schema.Types.ObjectId],
     default: [],
-    ref: 'Comments',
+    ref: "Comments"
   }
-
 };
 
 const blockersShema = Schema(blockers);
-const blockersModel = connection.model('Blockers', blockersShema);
+const blockersModel = connection.model("Blockers", blockersShema);
 
 /**
  * Custom validations
  */
-blockersShema.path('title').validate(function (value, callback) {
-  blockersModel.count({ title: value }, function (error, count) {
+blockersShema.path("title").validate(function(value, callback) {
+  blockersModel.count({ title: value }, function(error, count) {
     if (error) {
       return done(error);
     }
     callback(!count);
   });
-}, { message: 'title already exists', isAsync: true });
+},
+{ message: "title already exists", isAsync: true });
 
 export default blockersModel;
