@@ -192,4 +192,18 @@ export default class Blockers {
         Response.badRequest(res, error);
       });
   }
+
+  static searchBlockers(req, res) {
+    blockerModel.find({
+      $text: {
+        $search: req.query.q
+      }
+    })
+    .then((done) => {
+      Response.success(res, done);
+    })
+    .catch((error) => {
+      Response.notFound(res);
+    });
+  } 
 }
