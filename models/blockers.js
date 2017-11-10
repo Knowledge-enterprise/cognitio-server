@@ -14,7 +14,8 @@ const blockers = {
   content: {
     type: String,
     required: [true, "content is required"],
-    trim: true
+    trim: true,
+    text: true
   },
   tags: {
     type: [String],
