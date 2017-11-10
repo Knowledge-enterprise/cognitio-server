@@ -14,7 +14,8 @@ const blockers = {
   content: {
     type: String,
     required: [true, "content is required"],
-    trim: true
+    trim: true,
+    text: true
   },
   tags: {
     type: [String],
@@ -67,6 +68,8 @@ const blockers = {
 
 const blockersShema = Schema(blockers);
 const blockersModel = connection.model("Blockers", blockersShema);
+
+blockersModel.index({"title":"text", "content":"text", "tags": "text"}, {"weights": { title: 3, tags: 2, content: 1 }})
 
 /**
  * Custom validations
