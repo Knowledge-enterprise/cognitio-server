@@ -9,13 +9,12 @@ const blockers = {
     required: [true, "title is required"],
     unique: true,
     trim: true,
-    text: true
+    text: true,
   },
   content: {
     type: String,
     required: [true, "content is required"],
     trim: true,
-    text: true
   },
   tags: {
     type: [String],
@@ -23,7 +22,6 @@ const blockers = {
     set: tags => {
       return [...new Set(tags)];
     },
-    text: true
   },
   files: {
     type: [{}],
@@ -72,14 +70,14 @@ const blockersModel = connection.model("Blockers", blockersShema);
 /**
  * Custom validations
  */
-blockersShema.path("title").validate(function(value, callback) {
-  blockersModel.count({ title: value }, function(error, count) {
+blockersShema.path("title").validate(function (value, callback) {
+  blockersModel.count({ title: value }, function (error, count) {
     if (error) {
       return done(error);
     }
     callback(!count);
   });
 },
-{ message: "title already exists", isAsync: true });
+  { message: "title already exists", isAsync: true });
 
 export default blockersModel;

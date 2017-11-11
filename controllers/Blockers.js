@@ -27,18 +27,18 @@ export default class Blockers {
   static deleteBlocker(req, res) {
     blockerModel
       .findOneAndUpdate(
-        {
-          _id: req.params.id
-        },
-        {
-          $set: {
-            isArchived: true
-          }
-        },
-        {
-          new: false,
-          upsert: false
+      {
+        _id: req.params.id
+      },
+      {
+        $set: {
+          isArchived: true
         }
+      },
+      {
+        new: false,
+        upsert: false
+      }
       )
       .then(done => {
         Response.success(res, {
@@ -55,19 +55,19 @@ export default class Blockers {
   static updateBlocker(req, res) {
     blockerModel
       .findOneAndUpdate(
-        {
-          _id: req.params.id
-        },
-        {
-          $set: {
-            title: req.body.title,
-            content: req.body.content,
-            updatedAt: new Date()
-          }
-        },
-        {
-          new: true
+      {
+        _id: req.params.id
+      },
+      {
+        $set: {
+          title: req.body.title,
+          content: req.body.content,
+          updatedAt: new Date()
         }
+      },
+      {
+        new: true
+      }
       )
       .then((updatedBlocker) => {
         blockerModel.findById(updatedBlocker._id)
@@ -108,10 +108,10 @@ export default class Blockers {
         };
         userModel
           .findOneAndUpdate(
-            {
-              _id: res.locals.blocker.user
-            },
-            updateUser
+          {
+            _id: res.locals.blocker.user
+          },
+          updateUser
           )
           .then(user => {
             blockerModel
@@ -139,17 +139,17 @@ export default class Blockers {
   static upvoteBlocker(req, res) {
     blockerModel
       .findOneAndUpdate(
-        {
-          _id: req.params.id
-        },
-        {
-          $addToSet: {
-            rating: res.locals.user.email
-          }
-        },
-        {
-          new: true
+      {
+        _id: req.params.id
+      },
+      {
+        $addToSet: {
+          rating: res.locals.user.email
         }
+      },
+      {
+        new: true
+      }
       )
       .then(done => {
         Response.success(res, done);
@@ -162,17 +162,17 @@ export default class Blockers {
   static downvoteBlocker(req, res) {
     blockerModel
       .findOneAndUpdate(
-        {
-          _id: req.params.id
-        },
-        {
-          $pullAll: {
-            rating: [res.locals.user.email]
-          }
-        },
-        {
-          new: true
+      {
+        _id: req.params.id
+      },
+      {
+        $pullAll: {
+          rating: [res.locals.user.email]
         }
+      },
+      {
+        new: true
+      }
       )
       .then(done => {
         Response.success(res, done);
@@ -184,6 +184,7 @@ export default class Blockers {
 
   static addComment(req, res) {
     const blockerId = req.params.id;
+    console.log(blockerId, ' hjbjkbjhbhhj')
     blockerModel
       .findById(req.params.id)
       .then(blocker => {
@@ -191,6 +192,7 @@ export default class Blockers {
           return Response.badRequest(res, {
             message: `No rating found with Id ${blockerId}`
           });
+        console.log(req.body.comment)
         const comment = new commentModel(
           Object.assign(
             {},
@@ -209,6 +211,7 @@ export default class Blockers {
               .findById(newComment._id)
               .populate("user")
               .then(populatedComment => {
+                console.log(populatedComment);
                 Response.success(res, populatedComment);
               })
               .catch(error =>
@@ -250,6 +253,7 @@ export default class Blockers {
           $search: req.query.q
         }
       })
+      .populate('user')
       .then(done => {
         Response.success(res, done);
       })
