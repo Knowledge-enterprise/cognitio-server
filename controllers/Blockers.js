@@ -69,8 +69,15 @@ export default class Blockers {
           new: true
         }
       )
-      .then(done => {
-        Response.success(res, done);
+      .then((updatedBlocker) => {
+        blockerModel.findById(updatedBlocker._id)
+          .populate('user')
+          .then((populatedBlocker) => {
+            Response.success(res, populatedBlocker);
+          })
+          .catch((error) => {
+            Response.badRequest(res);
+          });
       })
       .catch(error => {
         Response.badRequest(res);
