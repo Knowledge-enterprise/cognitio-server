@@ -20,6 +20,9 @@ const users = {
   picture: {
     type: String,
   },
+  tags: {
+    type: Array,
+  },
   blockers: [{type: Schema.Types.ObjectId, ref: 'Blockers' }]
 };
 
