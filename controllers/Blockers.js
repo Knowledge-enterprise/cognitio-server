@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { Response } from "../utils";
-import { blockerModel, userModel, commentModel } from "../models";
+import { blockerModel, userModel, commentModel, tagModel } from "../models";
 import publisher from "../events/Publisher";
 
 export default class Blockers {
@@ -115,6 +115,7 @@ export default class Blockers {
   }
 
   static createBlocker(req, res) {
+    publisher.publish('update_tags', res.locals.blocker.tags);
     res.locals.blocker
       .save()
       .then(done => {

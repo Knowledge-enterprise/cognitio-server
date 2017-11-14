@@ -1,5 +1,5 @@
 import logger from 'winston';
-import { blockerModel } from '../models';
+import { blockerModel, tagModel } from '../models';
 
 export default {
   updateBlockerViewCount(payload) {
@@ -30,5 +30,18 @@ export default {
       .catch((error) => {
         logger.error(`ERROR: associating comment to a blocker ${error}`);
       });
+  },
+
+  updateTags(tags) {
+    tags.forEach((tag) => {
+      var tag = new tagModel({name: tag});
+      tag.save('tags')
+      .then((done) => {
+        logger.info('updated tags', done);
+      })
+      .catch((error) => {
+        logger.error('could not update tags', error)
+      })
+    })
   }
 }
