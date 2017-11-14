@@ -5,7 +5,6 @@ import { userModel } from '../models';
 export default class Authentication {
   static verify(req, res, next) {
     const authorizationToken = req.headers.authorization;
-
     if (!authorizationToken) return Response.unAuthorized(res);
 
     const token = authorizationToken ? authorizationToken.split(' ')[1] : null;

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { Response } from "../utils";
-import { blockerModel, userModel, commentModel } from "../models";
+import { blockerModel, userModel, commentModel, replyModel } from "../models";
 import publisher from "../events/Publisher";
 
 export default class Blockers {
@@ -199,7 +199,6 @@ export default class Blockers {
 
   static addComment(req, res) {
     const blockerId = req.params.id;
-    console.log(blockerId, " hjbjkbjhbhhj");
     blockerModel
       .findById(req.params.id)
       .then(blocker => {
@@ -228,6 +227,53 @@ export default class Blockers {
               .then(populatedComment => {
                 console.log(populatedComment);
                 Response.success(res, populatedComment);
+              })
+              .catch(error =>
+                Response.internalError(res, `An error occurred ${error}`)
+              );
+          })
+          .catch(error => {
+            Response.badRequest(
+              res,
+              `An error occurred creating comment ${error}`
+            );
+          });
+      })
+      .catch(error => {
+        Response.badRequest(res, `Error processing request: ${error}`);
+      });
+  }
+
+  static addCommentReply(req, res) {
+    const commentId = req.params.id;
+
+    commentModel
+      .findById(req.params.id)
+      .then(comment => {
+        if (!comment)
+          return Response.badRequest(res, {
+            message: `No rating found with Id ${blockerId}`
+          });
+        const reply = new replyModel(
+          Object.assign(
+            {},
+            {
+              reply: req.body.reply,
+              comment: commentId,
+              user: res.locals.user._id
+            }
+          )
+        );
+        reply
+          .save()
+          .then(newReply => {
+            publisher.publish("added_new_reply", newReply);
+            replyModel
+              .findById(newReply._id)
+              .populate("comment")
+              .then(populatedReply => {
+                console.log(populatedReply);
+                Response.success(res, populatedReply);
               })
               .catch(error =>
                 Response.internalError(res, `An error occurred ${error}`)
