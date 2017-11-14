@@ -249,11 +249,13 @@ export default class Blockers {
   static searchBlockers(req, res) {
     blockerModel
       .find({
-        $text: {
-          $search: req.query.q
-        }
+        $or: [
+          {title:{$regex:req.query.q, $options:"$im"}},
+          {content:{$regex:req.query.q, $options:"$im"}},
+          {tags:{$regex:req.query.q, $options:"$im"}}
+      ]
       })
-      .populate('user')
+      .populate("user")
       .then(done => {
         Response.success(res, done);
       })

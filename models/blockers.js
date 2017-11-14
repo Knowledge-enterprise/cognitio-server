@@ -8,8 +8,7 @@ const blockers = {
     type: String,
     required: [true, "title is required"],
     unique: true,
-    trim: true,
-    text: true,
+    trim: true
   },
   content: {
     type: String,
