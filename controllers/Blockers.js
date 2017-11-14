@@ -27,18 +27,18 @@ export default class Blockers {
   static deleteBlocker(req, res) {
     blockerModel
       .findOneAndUpdate(
-      {
-        _id: req.params.id
-      },
-      {
-        $set: {
-          isArchived: true
+        {
+          _id: req.params.id
+        },
+        {
+          $set: {
+            isArchived: true
+          }
+        },
+        {
+          new: false,
+          upsert: false
         }
-      },
-      {
-        new: false,
-        upsert: false
-      }
       )
       .then(done => {
         Response.success(res, {
@@ -55,27 +55,28 @@ export default class Blockers {
   static updateBlocker(req, res) {
     blockerModel
       .findOneAndUpdate(
-      {
-        _id: req.params.id
-      },
-      {
-        $set: {
-          title: req.body.title,
-          content: req.body.content,
-          updatedAt: new Date()
+        {
+          _id: req.params.id
+        },
+        {
+          $set: {
+            title: req.body.title,
+            content: req.body.content,
+            updatedAt: new Date()
+          }
+        },
+        {
+          new: true
         }
-      },
-      {
-        new: true
-      }
       )
-      .then((updatedBlocker) => {
-        blockerModel.findById(updatedBlocker._id)
-          .populate('user')
-          .then((populatedBlocker) => {
+      .then(updatedBlocker => {
+        blockerModel
+          .findById(updatedBlocker._id)
+          .populate("user")
+          .then(populatedBlocker => {
             Response.success(res, populatedBlocker);
           })
-          .catch((error) => {
+          .catch(error => {
             Response.badRequest(res);
           });
       })
@@ -85,17 +86,31 @@ export default class Blockers {
   }
 
   static getAllBlockers(req, res) {
+    const limit = parseInt(req.query.limit, 10)
+      ? parseInt(req.query.limit, 10)
+      : 10;
+    const page = parseInt(req.query.page, 10)
+      ? parseInt(req.query.page, 10)
+      : 1;
+
     blockerModel
-      .find({
-        isArchived: false
-      })
-      .sort({ _id: -1 })
-      .populate("user")
-      .then(done => {
-        Response.success(res, done);
+      .paginate(
+        {
+          isArchived: false
+        },
+        {
+          sort: { _id: -1 },
+          populate: "user",
+          lean: false,
+          limit,
+          page
+        }
+      )
+      .then(blockers => {
+        Response.success(res, blockers);
       })
       .catch(error => {
-        Response.internalError(res);
+        Response.internalError(res, error);
       });
   }
 
@@ -108,10 +123,10 @@ export default class Blockers {
         };
         userModel
           .findOneAndUpdate(
-          {
-            _id: res.locals.blocker.user
-          },
-          updateUser
+            {
+              _id: res.locals.blocker.user
+            },
+            updateUser
           )
           .then(user => {
             blockerModel
@@ -139,40 +154,40 @@ export default class Blockers {
   static upvoteBlocker(req, res) {
     blockerModel
       .findOneAndUpdate(
-      {
-        _id: req.params.id
-      },
-      {
-        $addToSet: {
-          rating: res.locals.user.email
+        {
+          _id: req.params.id
+        },
+        {
+          $addToSet: {
+            rating: res.locals.user.email
+          }
+        },
+        {
+          new: true
         }
-      },
-      {
-        new: true
-      }
       )
       .then(done => {
         Response.success(res, done);
       })
       .catch(error => {
-        Response.badRequest(res);
+        Response.badRequest(res, error);
       });
   }
 
   static downvoteBlocker(req, res) {
     blockerModel
       .findOneAndUpdate(
-      {
-        _id: req.params.id
-      },
-      {
-        $pullAll: {
-          rating: [res.locals.user.email]
+        {
+          _id: req.params.id
+        },
+        {
+          $pullAll: {
+            rating: [res.locals.user.email]
+          }
+        },
+        {
+          new: true
         }
-      },
-      {
-        new: true
-      }
       )
       .then(done => {
         Response.success(res, done);
@@ -184,7 +199,7 @@ export default class Blockers {
 
   static addComment(req, res) {
     const blockerId = req.params.id;
-    console.log(blockerId, ' hjbjkbjhbhhj')
+    console.log(blockerId, " hjbjkbjhbhhj");
     blockerModel
       .findById(req.params.id)
       .then(blocker => {
@@ -192,7 +207,7 @@ export default class Blockers {
           return Response.badRequest(res, {
             message: `No rating found with Id ${blockerId}`
           });
-        console.log(req.body.comment)
+        console.log(req.body.comment);
         const comment = new commentModel(
           Object.assign(
             {},
@@ -247,15 +262,31 @@ export default class Blockers {
   }
 
   static searchBlockers(req, res) {
+    const limit = parseInt(req.query.limit, 10)
+      ? parseInt(req.query.limit, 10)
+      : 10;
+    const page = parseInt(req.query.page, 10)
+      ? parseInt(req.query.page, 10)
+      : 1;
+    const query = req.query.q;
+
     blockerModel
-      .find({
-        $or: [
-          {title:{$regex:req.query.q, $options:"$im"}},
-          {content:{$regex:req.query.q, $options:"$im"}},
-          {tags:{$regex:req.query.q, $options:"$im"}}
-      ]
-      })
-      .populate("user")
+      .paginate(
+        {
+          isArchived: false,
+          $or: [
+            { title: { $regex: query, $options: "$im" } },
+            { content: { $regex: query, $options: "$im" } },
+            { tags: { $regex: query, $options: "$im" } }
+          ]
+        },
+        {
+          populate: "user",
+          lean: false,
+          limit,
+          page
+        }
+      )
       .then(done => {
         Response.success(res, done);
       })

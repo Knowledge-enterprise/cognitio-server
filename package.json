@@ -28,16 +28,14 @@
     "cors": "^2.8.4",
     "dotenv": "^4.0.0",
     "express": "^4.16.1",
-    "glot.io": "^1.28.2",
-    "he-sdk-nodejs": "^0.1.0",
     "jsonwebtoken": "^8.1.0",
     "mongoose": "^4.12.1",
+    "mongoose-paginate": "^5.0.3",
     "morgan": "^1.9.0",
     "needle": "^2.0.1",
-    "peer": "^0.2.8",
+    "nodemon": "^1.12.1",
     "socket.io": "^2.0.4",
     "spdy": "^3.4.7",
-    "nodemon": "^1.12.1",
     "winston": "^2.4.0"
   },
   "devDependencies": {
