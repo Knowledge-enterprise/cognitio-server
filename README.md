@@ -2,7 +2,7 @@
 Server side for the Cognitio blocker application - a knowledge hub for documenting blockers and their solutions.
 
 ## Documentation
-Checkout [](http://docs.lenken.apiary.io/) for Cognitio API documentation.
+Checkout [Slate]() for Cognitio API documentation.
 Below are the steps required to successfully install and start the cognitio-server on a local system:
 
 ## Technologies Used
