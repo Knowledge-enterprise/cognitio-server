@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-paginate";
 import { connection } from "../configs";
 
 const Schema = mongoose.Schema;
@@ -8,19 +9,20 @@ const blockers = {
     type: String,
     required: [true, "title is required"],
     unique: true,
-    trim: true
+    trim: true,
+    text: true
   },
   content: {
     type: String,
     required: [true, "content is required"],
-    trim: true,
+    trim: true
   },
   tags: {
     type: [String],
     required: [true, "tags are required"],
     set: tags => {
       return [...new Set(tags)];
-    },
+    }
   },
   files: {
     type: [{}],
@@ -64,19 +66,22 @@ const blockers = {
 };
 
 const blockersShema = Schema(blockers);
+
+blockersShema.plugin(mongoosePaginate);
+
 const blockersModel = connection.model("Blockers", blockersShema);
 
 /**
  * Custom validations
  */
-blockersShema.path("title").validate(function (value, callback) {
-  blockersModel.count({ title: value }, function (error, count) {
+blockersShema.path("title").validate(function(value, callback) {
+  blockersModel.count({ title: value }, function(error, count) {
     if (error) {
       return done(error);
     }
     callback(!count);
   });
 },
-  { message: "title already exists", isAsync: true });
+{ message: "title already exists", isAsync: true });
 
 export default blockersModel;
