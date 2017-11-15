@@ -3,3 +3,4 @@ export { default as categoryModel } from './categories';
 export { default as ratingModel } from './ratings';
 export { default as userModel } from './users';
 export { default as commentModel } from './comments';
+export { default as replyModel } from './replies';
