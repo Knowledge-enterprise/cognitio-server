@@ -8,7 +8,6 @@ const blockers = {
   title: {
     type: String,
     required: [true, "title is required"],
-    unique: true,
     trim: true,
     text: true
   },
@@ -70,18 +69,5 @@ const blockersShema = Schema(blockers);
 blockersShema.plugin(mongoosePaginate);
 
 const blockersModel = connection.model("Blockers", blockersShema);
-
-/**
- * Custom validations
- */
-blockersShema.path("title").validate(function(value, callback) {
-  blockersModel.count({ title: value }, function(error, count) {
-    if (error) {
-      return done(error);
-    }
-    callback(!count);
-  });
-},
-{ message: "title already exists", isAsync: true });
 
 export default blockersModel;
