@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/Knowledge-enterprise/cognitio-server/tree/develop.svg?style=svg)](https://circleci.com/gh/Knowledge-enterprise/cognitio-server/tree/develop)
+
 # Cognitio Server
 Server side for the Cognitio blocker application - a knowledge hub for documenting blockers and their solutions.
 
@@ -7,7 +9,7 @@ Below are the steps required to successfully install and start the cognitio-serv
 
 ## Technologies Used
 - [node & npm](https://nodejs.org/en/download/)
-- [Express](https://expressjs.com/) 4.16.1 
+- [Express](https://expressjs.com/) 4.16.1
 - [MongoDB](https://docs.mongodb.com/v3.6/?_ga=2.163424252.1502849300.1509982645-2035839376.1509982645)
 
 

@@ -13,6 +13,8 @@ if (process.env.NODE_ENV === "staging") {
   mongoose.set("debug", true);
 } else if (process.env.NODE_ENV === "production") {
   dbURI = process.env.MONGODB_ATLAS_URI;
+} else if (process.env.NODE_ENV === "test") {
+  dbURI = process.env.MONGODB_TEST_URI;
 } else {
   mongoose.set("debug", true);
   dbURI = process.env.MONGODB_URI;
