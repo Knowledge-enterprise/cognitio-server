@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test":
-      "mocha --compilers js:babel-core/register --exit test/**.spec.js --timeout 1000",
+      "NODE_ENV=test mocha --require babel-core/register --exit test/**.spec.js --timeout 1000",
     "start": "nodemon",
     "start:dev": "nodemon"
   },

@@ -10,6 +10,8 @@ jobs:
       - image: circleci/node:8.9.0
         environment:
           MONGODB_URI: mongodb://localhost/cognitio
+          JWT_SECRET: helloworld
+          MONGODB_TEST_URI: mongodb://localhost/cognitio_test
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
