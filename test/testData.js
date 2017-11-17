@@ -4,3 +4,9 @@ export const testUser = {
   email: "kenpachi@bleach.com",
   picture: "http://www.quanmax.com/site/wp-content/uploads/2017/06/test.png"
 };
+
+export const sampleBlocker = {
+  title: "Simple Print in JS",
+  content: "console.log('yo!')",
+  tags: "j"
+};
