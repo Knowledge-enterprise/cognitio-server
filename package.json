@@ -4,8 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test":
-      "NODE_ENV=test mocha --require babel-core/register --exit test/**.spec.js --timeout 1000",
+    "test": "NODE_ENV=test mocha --require babel-core/register --exit test/**.spec.js --timeout 1000",
     "start": "nodemon",
     "start:dev": "nodemon"
   },
@@ -48,6 +47,9 @@
     "nyc": "^11.3.0"
   },
   "babel": {
-    "presets": ["stage-0", "es2015"]
+    "presets": [
+      "stage-0",
+      "es2015"
+    ]
   }
 }

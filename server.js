@@ -1,9 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
-import cors from "cors";
-import morgan from "morgan";
 import logger from "winston";
-import compression from "compression";
 import { Response } from "./utils";
 
 import { subscribeHandlers } from "./events";
@@ -21,18 +18,6 @@ const sslOptions = {
     plain: false
   }
 };
-
-server.use(compression());
-server.use(
-  cors({
-    origin: "*",
-    methods: "GET, HEAD, PUT, PATCH, POST, DELETE",
-    preflightContinue: false,
-    optionsSuccessStatus: 204
-  })
-);
-
-server.use(morgan("combined"));
 
 server.all("*", (req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");

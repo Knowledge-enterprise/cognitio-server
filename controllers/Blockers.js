@@ -206,7 +206,6 @@ export default class Blockers {
           return Response.badRequest(res, {
             message: `No rating found with Id ${blockerId}`
           });
-        console.log(req.body.comment);
         const comment = new commentModel(
           Object.assign(
             {},
@@ -246,33 +245,29 @@ export default class Blockers {
 
   static addCommentReply(req, res) {
     const commentId = req.params.id;
-
     commentModel
-      .findById(req.params.id)
+      .findById(commentId)
       .then(comment => {
         if (!comment)
           return Response.badRequest(res, {
-            message: `No rating found with Id ${blockerId}`
+            message: `No comment found with Id ${commentId}`
           });
-        const reply = new replyModel(
-          Object.assign(
-            {},
-            {
-              reply: req.body.reply,
-              comment: commentId,
-              user: res.locals.user._id
-            }
-          )
-        );
+
+        const reply = new commentModel({
+          comment: req.body.reply,
+          user: res.locals.user._id,
+          isReply: true,
+          commentId: commentId
+        });
+
         reply
           .save()
           .then(newReply => {
             publisher.publish("added_new_reply", newReply);
-            replyModel
+            commentModel
               .findById(newReply._id)
-              .populate("comment")
+              .populate("user")
               .then(populatedReply => {
-                console.log(populatedReply);
                 Response.success(res, populatedReply);
               })
               .catch(error =>
@@ -299,6 +294,14 @@ export default class Blockers {
       })
       .sort({ _id: -1 })
       .populate("user")
+      .populate({
+        path: "replies",
+        model: "Comments",
+        populate: {
+          path: "user",
+          model: "Users"
+        }
+      })
       .then(done => {
         Response.success(res, done);
       })
