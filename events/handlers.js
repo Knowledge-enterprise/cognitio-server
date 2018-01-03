@@ -67,5 +67,23 @@ export default {
       .catch(error => {
         logger.error(`ERROR: associating reply to a comment ${error}`);
       });
+  },
+
+  removeCommentFromBlocker(payload) {
+    const blockerId = payload.blockerId;
+    const commentId = payload.commentId;
+    
+    blockerModel.find({
+      _id: blockerId,
+      comments: ObjectId(commentId)
+    })
+    .then(deletedComment => {
+      logger.info(
+        `successfully deleted comment`
+      );
+    })
+    .catch(error => {
+      logger.error(`ERROR: deleting comment ${error}`);
+    });
   }
 };

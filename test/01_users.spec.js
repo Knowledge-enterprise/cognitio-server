@@ -3,7 +3,6 @@ import chaiHttp from "chai-http";
 
 import server from "../app";
 import { testUser } from "./testData";
-console.log(testUser);
 const expect = chai.expect;
 chai.use(chaiHttp);
 

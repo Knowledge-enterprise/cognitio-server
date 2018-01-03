@@ -343,4 +343,25 @@ export default class Blockers {
         Response.notFound(res, error);
       });
   }
+  
+  static deleteComment(req, res) {
+    const blockerId = req.params.id;
+    const commentId = req.params.commentId;
+    commentModel.findByIdAndRemove({
+      _id: commentId
+    })
+    .then(response => {
+      if (!response)
+      return Response.notFound(res,
+        `No comment found with Id ${commentId}`
+      );
+      else {
+        publisher.publish('deleted_comment', { blockerId, commentId });
+        return Response.success(res, { message:"Comment deleted sucessfully" });
+      }
+    })
+    .catch(error => {
+      Response.internalError(res, error);
+    });
+  }
 }
