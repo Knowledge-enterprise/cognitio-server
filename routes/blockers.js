@@ -17,6 +17,7 @@ router.put('/:id/upvote', AM.verify, Blockers.upvoteBlocker);
 router.put('/:id/downvote', AM.verify, Blockers.downvoteBlocker);
 router.get('/:id/comments', AM.verify, Blockers.getComments);
 router.post('/:id/comments', AM.verify, Blockers.addComment);
+router.delete('/:id/:commentId', Blockers.deleteComment);
 router.post('/comment/:id/reply', AM.verify, Blockers.addCommentReply);
 
 export default router;

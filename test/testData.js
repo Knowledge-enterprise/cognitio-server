@@ -10,3 +10,7 @@ export const sampleBlocker = {
   content: "console.log('yo!')",
   tags: "j"
 };
+
+export const sampleComment = {
+  comment: "Wonderful!"
+};
